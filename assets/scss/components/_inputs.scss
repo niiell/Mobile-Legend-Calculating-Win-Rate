@@ -2,8 +2,19 @@
     background-color: transparent !important;
     color: $text-color !important;
     border-radius: 0px;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 8px rgba($primary-color, 0.7);
+        border-color: $primary-color !important;
+        background-color: rgba($primary-color, 0.1) !important;
+    }
+    &.invalid {
+        animation: shake 0.3s;
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 8px rgba(220, 53, 69, 0.7);
+    }
 }
-
 
 /* Chrome, Safari, Edge, Opera */
 
@@ -13,9 +24,20 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
-
 /* Firefox */
 
 input[type=number] {
     -moz-appearance: textfield;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    20%, 60% {
+        transform: translateX(-8px);
+    }
+    40%, 80% {
+        transform: translateX(8px);
+    }
 }

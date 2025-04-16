@@ -1,5 +1,12 @@
 .sosmed {
     margin-top: 225px;
+    a {
+        transition: transform 0.3s ease, color 0.3s ease;
+        &:hover {
+            color: $primary-color !important;
+            transform: scale(1.2);
+        }
+    }
 }
 
 .logo-img {
@@ -13,6 +20,7 @@
 .welcomeMsg p,
 .welcomeMsg a {
     font-size: 11px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .welcomeMsg a {
@@ -21,12 +29,45 @@
     font-weight: 600 !important;
 }
 
+.welcomeMsg {
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: fadeSlideIn 0.8s forwards;
+    animation-delay: 0.3s;
+}
+
+#resultText {
+    margin-top: 1rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: $primary-color;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#resultText.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 @keyframes animation-msg {
     0% {
         opacity: 0;
     }
     100% {
         opacity: 1;
+    }
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 

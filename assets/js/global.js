@@ -1,26 +1,27 @@
+/**
+ * Initializes localStorage item 'cookies' if not present.
+ */
 function checkLS() {
     if (localStorage.getItem('cookies') === null) {
         localStorage.setItem('cookies', 0);
     }
 }
 
+/**
+ * Handles the result button click event.
+ * Calls validation function.
+ */
 function res() {
-    // let sum = parseInt(localStorage.getItem('cookies'))
-
-    // if (sum == 0) {
-    //     window.open('https://www.effectivecpmgate.com/swqh6tcn3k?key=163b8eee7c2fbbbdae754cb90a81d9f7', '_blank');
-    // } else {
     validation();
-    // }
-    // localStorage.setItem('cookies', 1);
-
 }
 
+/**
+ * Displays rotating welcome messages with contact info.
+ */
 function welcomeMsg() {
     const welcomeMsgEl = document.querySelector("#welcomeMsg");
     let array = 0;
 
-    const Maceng = `<a href="https://maceng.my.id/" target="_blank">Maceng</a>`;
     const MacengIG = `<a href="https://www.instagram.com/maceeeeng/" target="_blank">maceeeeng</a>`;
     const MacengWA = `<a href="https://api.whatsapp.com/send?phone=6285161602919" target="_blank">6285161602919</a>`;
 
@@ -37,6 +38,7 @@ function welcomeMsg() {
     }, 5000);
 }
 
+// Google Analytics setup
 window.dataLayer = window.dataLayer || [];
 
 function gtag() { dataLayer.push(arguments); }

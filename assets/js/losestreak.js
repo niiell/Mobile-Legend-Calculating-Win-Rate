@@ -1,52 +1,68 @@
+
+import { validateInputs } from './validation.js';
+
 // Variables
 const hasil = document.querySelector("#hasil");
 const resultText = document.querySelector("#resultText");
 
-// Functions
-
-
+/**
+ * Validates inputs and calculates new win rate after losing streak.
+ * Displays appropriate messages including edge cases.
+ */
 function validation() {
     const tMatch = parseFloat(document.querySelector("#tMatch").value);
     const tWr = parseFloat(document.querySelector("#tWr").value);
     const lsReq = parseFloat(document.querySelector("#lsReq").value);
 
+    const validationResult = validateInputs(tMatch, tWr, lsReq, "lsReq");
+    if (!validationResult.valid) {
+        display(validationResult.message);
+        return;
+    }
+
     const totalNum = total(tMatch, tWr, lsReq);
-    const minLoseNum = minLose(tMatch, tWr, lsReq);
+    const minLoseNum = minLose(tMatch, tWr);
     let text = "";
 
-    if (isNaN(tMatch) || isNaN(tWr) || isNaN(lsReq)) {
-        text = `Field harus diisi bro.`;
-        display(text);
-    } else if (lsReq % 1 != 0 || tMatch % 1 != 0) {
-        text = `Field harus bilangan bulat`;
-        display(text);
-    } else if (tMatch < 0 || tWr < 0 || lsReq < 0) {
-        text = `Field tidak boleh lebih kecil dari 0`;
-        display(text);
-    } else if (totalNum < 0) {
+    if (totalNum < 0) {
         text = `Minimal anda harus losestreak <b>${minLoseNum}</b> kali`;
-        display(text);
     } else if (tWr > 100) {
         text = `WR tidak boleh lebih dari 100%`;
-        display(text);
     } else {
         text = `Jika anda losestreak sebanyak <b>${lsReq}</b> kali, maka winrate anda menjadi <b>${totalNum}%</b>`;
-        display(text);
     }
+    display(text);
 }
 
+/**
+ * Displays the result or error message in the UI.
+ * @param {string} text - HTML string to display.
+ */
 function display(text) {
-    return resultText.innerHTML = text;
+    resultText.innerHTML = text;
 }
 
+/**
+ * Calculates new win rate after losing streak.
+ * @param {number} tMatch - Total matches played.
+ * @param {number} tWr - Current win rate percentage.
+ * @param {number} lsReq - Losing streak count.
+ * @returns {string} New win rate percentage formatted to 1 decimal place.
+ */
 function total(tMatch, tWr, lsReq) {
     let totalWin = (tMatch * tWr) / 100;
     let win = totalWin / (tMatch + lsReq) * 100;
     return win.toFixed(1);
 }
 
+/**
+ * Calculates minimum losing streak count.
+ * @param {number} tMatch - Total matches played.
+ * @param {number} tWr - Current win rate percentage.
+ * @returns {number} Minimum losing streak count rounded up.
+ */
 function minLose(tMatch, tWr) {
-    return Math.ceil(tMatch * tWr / 100)
+    return Math.ceil(tMatch * tWr / 100);
 }
 
 // Main

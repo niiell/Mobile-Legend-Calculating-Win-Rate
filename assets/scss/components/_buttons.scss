@@ -1,16 +1,24 @@
 .btn {
-    transition: .225s;
+    transition: background-color 0.3s ease, transform 0.2s ease;
     padding: .475rem 3rem;
     border-radius: 0px;
+    cursor: pointer;
+    user-select: none;
     &-primary {
         background-color: $primary-color;
         border-color: $primary-color !important;
         &:hover,
         &:focus {
             background-color: darken($primary-color, 10);
+            transform: scale(1.05);
+        }
+        &:active {
+            transform: scale(0.95);
+            transition: transform 0.1s ease;
         }
         &:focus {
             box-shadow: none !important;
+            outline: none;
         }
     }
 }

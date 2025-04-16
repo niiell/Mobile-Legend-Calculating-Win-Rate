@@ -1,53 +1,60 @@
+
+import { validateInputs } from './validation.js';
+
 // Variables
 const hasil = document.querySelector("#hasil");
 const resultText = document.querySelector("#resultText");
 
+/**
+ * Validates inputs and calculates the number of wins needed to reach target win rate.
+ * Displays appropriate messages including edge cases.
+ */
 function validation() {
     const tMatch = parseFloat(document.querySelector("#tMatch").value);
     const tWr = parseFloat(document.querySelector("#tWr").value);
     const wrReq = parseFloat(document.querySelector("#wrReq").value);
 
+    const validationResult = validateInputs(tMatch, tWr, wrReq, "wrReq");
+    if (!validationResult.valid) {
+        display(validationResult.message);
+        return;
+    }
+
     const resultNum = rumus(tMatch, tWr, wrReq);
     const loseNum = rumusLose(tMatch, tWr, wrReq);
 
     let text = "";
-    if (isNaN(tMatch) || isNaN(tWr) || isNaN(wrReq)) {
-        text = `Field harus diisi bro.`;
-        display(text);
-    } else if (tMatch < 0 || tWr < 0 || wrReq < 0) {
-        text = `Field tidak boleh lebih kecil dari 0`;
-        display(text);
-    } else if (tMatch % 1 != 0) {
-        text = `Field harus bilangan bulat`;
-        display(text);
-    } else if (tWr == 100 && wrReq == 100) {
+    if (tWr == 100 && wrReq == 100) {
         text = `Kamu perlu <b>0</b> win tanpa lose untuk mendapatkan win rate <b>${wrReq}%</b>`;
-        display(text);
-    } else if (wrReq > 100 || tWr > 100) {
-        text = `WR tidak boleh lebih dari 100%`;
-        display(text);
     } else if (tWr > wrReq) {
         text = `Kamu perlu <b>${loseNum}</b> lose tanpa win untuk mendapatkan win rate <b>${wrReq}%</b>`;
-        display(text);
     } else if (tMatch == 0 && tWr == 0 && wrReq == 100) {
         text = `Kamu perlu <b>1</b> win tanpa lose untuk mendapatkan win rate <b>${wrReq}%</b>`;
-        display(text);
     } else if (wrReq == 100) {
         text = `yo ndak bisa, yang bisa cuman Monton`;
-        display(text);
     } else if (resultNum >= 100000) {
         text = `Kamu perlu lebih dari <b>100.000</b> win tanpa lose untuk mendapatkan win rate <b>${wrReq}%</b>`;
-        display(text);
     } else {
         text = `Kamu perlu <b>${resultNum}</b> win tanpa lose untuk mendapatkan win rate <b>${wrReq}%</b>`;
-        display(text);
     }
+    display(text);
 }
 
+/**
+ * Displays the result or error message in the UI.
+ * @param {string} text - HTML string to display.
+ */
 function display(text) {
-    return resultText.innerHTML = text;
+    resultText.innerHTML = text;
 }
 
+/**
+ * Calculates the number of wins needed to reach the target win rate.
+ * @param {number} tMatch - Total matches played.
+ * @param {number} tWr - Current win rate percentage.
+ * @param {number} wrReq - Target win rate percentage.
+ * @returns {number} Rounded number of wins needed.
+ */
 function rumus(tMatch, tWr, wrReq) {
     let tWin = tMatch * (tWr / 100);
     let tLose = tMatch - tWin;
@@ -58,6 +65,13 @@ function rumus(tMatch, tWr, wrReq) {
     return Math.round(final);
 }
 
+/**
+ * Calculates the number of losses needed to reach the target win rate.
+ * @param {number} tMatch - Total matches played.
+ * @param {number} tWr - Current win rate percentage.
+ * @param {number} wrReq - Target win rate percentage.
+ * @returns {number} Rounded number of losses needed.
+ */
 function rumusLose(tMatch, tWr, wrReq) {
     let totalWin = (tMatch * tWr) / 100;
     let win = (totalWin / (wrReq / 100)) - tMatch;
@@ -78,5 +92,13 @@ function load() {
 }
 
 function eventListener() {
-    hasil.addEventListener("click", res);
+    hasil.addEventListener("click", () => {
+        validation();
+
+        // Animate result display
+        resultText.classList.remove("show");
+        setTimeout(() => {
+            resultText.classList.add("show");
+        }, 50);
+    });
 }
